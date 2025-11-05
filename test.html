@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Facebook Scraper Test</title>
+  <style>
+    body { font-family: Arial; margin: 20px; }
+    textarea { width: 100%; height: 400px; }
+    button { padding: 10px 20px; font-size: 16px; }
+  </style>
+</head>
+<body>
+  <h1>🚀 Facebook Scraper API Test</h1>
+  
+  <label>Page URL:</label>
+  <input type="text" id="pageUrl" value="https://www.facebook.com/lemarchefurniture.eg" style="width: 100%; padding: 5px;">
+  
+  <br><br>
+  
+  <label>Posts Target:</label>
+  <input type="number" id="postsTarget" value="50" style="padding: 5px;">
+  
+  <br><br>
+  
+  <button onclick="testAPI()">🔍 Start Scraping</button>
+  
+  <h3>Response:</h3>
+  <textarea id="response" readonly></textarea>
+
+  <script>
+    async function testAPI() {
+      const pageUrl = document.getElementById('pageUrl').value;
+      const postsTarget = parseInt(document.getElementById('postsTarget').value);
+      const responseEl = document.getElementById('response');
+      
+      responseEl.value = 'Loading...';
+      
+      try {
+        const res = await fetch('http://localhost:3000/api/scrape', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            pageUrl,
+            postsTarget,
+            scrollDelayMs: 5000
+          })
+        });
+        
+        const data = await res.json();
+        responseEl.value = JSON.stringify(data, null, 2);
+      } catch (err) {
+        responseEl.value = `Error: ${err.message}`;
+      }
+    }
+  </script>
+</body>
+</html>
